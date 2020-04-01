@@ -19,4 +19,9 @@ public class FirstClass {
         int i = 100;
         System.out.println(i + 100);
     }
+
+    //更新代码
+    public void printNum() {
+        System.out.println(520);
+    }
 }
