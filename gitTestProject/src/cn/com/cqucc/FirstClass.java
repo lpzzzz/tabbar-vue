@@ -29,4 +29,11 @@ public class FirstClass {
     public void devTest() {
         System.out.println("dev");
     }
+
+    /**
+     * 在dev02分支中创建 dev02Test方法
+     */
+    public void dev02Test() {
+        System.out.println("dev02");
+    }
 }
