@@ -24,4 +24,8 @@ public class FirstClass {
     public void printNum() {
         System.out.println(520);
     }
+
+    public void devTest() {
+        System.out.println("dev");
+    }
 }
