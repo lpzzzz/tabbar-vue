@@ -14,4 +14,9 @@ public class FirstClass {
         int i = 10;
         System.out.println(i + 10);
     }
+
+    public void testGitUpdate() {
+        int i = 100;
+        System.out.println(i + 100);
+    }
 }
