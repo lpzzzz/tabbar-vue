@@ -1,0 +1,44 @@
+@Controller
+@RequestMapping("/parkData")
+public class ParkDataController {
+
+    @Autowired
+    private ParkService parkService;
+    @Autowired
+    private CardService cardService;
+
+    @Autowired
+    private SeatService seatService;
+
+
+    @RequestMapping(path = "/data", method = RequestMethod.GET)
+    public String getParkData(Model model,
+                              @RequestParam(name = "status", defaultValue = "3") int status,
+                              @RequestParam(name = "type", defaultValue = "3") int type,
+                              @RequestParam(name = "unBalance", defaultValue = "3") int unBalance,
+                              @RequestParam(name = "timeStatus", defaultValue = "3") int timeStatus) {
+
+        model.addAttribute("unBalance", cardService.selectCardRows(status, type, unBalance, timeStatus)); // 欠费用户数量
+        /*查询的是已经出场的 类型为所有 时间段是最近7天的停车信息*/
+        model.addAttribute("payPark", parkService.selectAllParkRows(0, type, timeStatus)); // 已结算数量
+        /*查询的是未出场的 类型为所有 时间段是最近7天的停车信息*/
+        model.addAttribute("unPayPark", parkService.selectAllParkRows(1, type, timeStatus)); // 未计算数量
+
+        // 查询出已经结算的停车数据 进行统计
+        List<Park> parks = parkService.selectAllParks(0, Integer.MAX_VALUE, 0, type, timeStatus); // 已经结算完成的订单
+        // 有 0-临时车位 1-普通车位 2-VIP车位 分别计算他们的 总费用
+        double tMoney = parkMoney(parks, 0); // 临时车位 总停车费用
+        double cMoney = parkMoney(parks, 1); // 普通车位总停车费用
+        double vMoney = parkMoney(parks, 2); // VIP车位总停车费用
+        model.addAttribute("tMoney", tMoney);
+        model.addAttribute("cMoney", cMoney);
+        model.addAttribute("vMoney", vMoney);
+        double allMoney = tMoney + cMoney + vMoney;
+        model.addAttribute("allMoney", allMoney);
+        model.addAttribute("timeStatus", timeStatus);
+        System.out.println(tMoney);
+        System.out.println(cMoney);
+        System.out.println(vMoney);
+        return "parking/data";
+    }
+
